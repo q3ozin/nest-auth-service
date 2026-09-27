@@ -17,3 +17,12 @@
 * **Logging:** Centralized error logging and system activity tracking.
 
 ---
+
+## 🗺️ Roadmap & Features
+
+- [x] Basic NestJS Setup & Project Structure
+- [x] PostgreSQL & Prisma ORM Integration
+- [ ] JWT Authentication (Access & Refresh Tokens)
+- [ ] Redis Token Blacklisting & Session Caching
+- [ ] Role-Based Access Control (RBAC)
+- [ ] Docker & Docker Compose Setup
