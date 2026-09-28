@@ -1,71 +1,59 @@
-import { Injectable , ConflictException, UnauthorizedException } from "@nestjs/common";
-
+import { Injectable, ConflictException, UnauthorizedException } from "@nestjs/common";
 import { LoginDto, RegisterDto } from "./dto/user.dto.js";
-
-// import { TokenService } from "./token.service.js";
-// import { UserRepository } from "./user.repository.js";
 
 @Injectable()
 export class AuthService {
+  // TODO: Inject TokenService and UserRepository once database and redis modules are integrated
+  constructor() {}
 
-    constructor (
-        private readonly tokenService : TokenService,
-        private readonly userRepository : UserRepository, 
-    ) {}
+  async logout(_id: number) {
+    // TODO: Implement token revocation using Redis
+    return { success: true };
+  }
 
-    async logout(id: number) {
-        return await this.tokenService.revokeToken(id);
+  async refreshToken(token: string) {
+    // TODO: Implement refresh token validation logic
+    return { token };
+  }
+
+  async login(auth: LoginDto) {
+    // TODO: Replace mock check with UserRepository lookup
+    const user = { id: 1, username: auth.username, email: "user@example.com" };
+
+    if (!user) {
+      throw new UnauthorizedException("Invalid username or password");
     }
 
-    async refreshToken(token: string) {
-        return await this.tokenService.refreshToken(token);
+    // TODO: Replace with Bcrypt password verification
+    const isPasswordValid = true;
+    if (!isPasswordValid) {
+      throw new UnauthorizedException("Invalid username or password");
     }
 
-    async login(auth : LoginDto) {
-        const user = await this.userRepository.checkUser(auth.username);
+    // TODO: Generate real JWT token via TokenService
+    return {
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+      accessToken: "mock-access-token",
+    };
+  }
 
-        if(!user) {
-            throw new UnauthorizedException('یوزرنیم یا پسورد اشتباه است')
-        }
-
-        const isPasswordValid = 's'; // . . .
-        if(!isPasswordValid) {
-            throw new UnauthorizedException('یوزرنیم یا پسورد اشتباه است')
-        }
-
-        const token = await this.tokenService.generateToken(user.id , user.username);
-
-        return { 
-            user : {
-                id : user.id,
-                username : user.username,
-                email : user.email,
-        },
-            ...token,
-        }
+  async register(auth: RegisterDto) {
+    // TODO: Add database validation for existing username/email
+    const userExists = false;
+    if (userExists) {
+      throw new ConflictException("Username or email already exists");
     }
 
-    async register(auth : RegisterDto) {
-        
-        const check = await this.userRepository.checkUser(auth.username , auth.email)
+    // TODO: Hash password using Bcrypt before saving
+    const mockUser = { id: 1, username: auth.username, email: auth.email };
 
-        if (check) {
-            if (check.username === auth.username) {
-                throw new ConflictException('نام کاربری قبلاً انتخاب شده است');
-            }
-            if (check.email === auth.email) {
-                throw new ConflictException('این ایمیل قبلاً ثبت شده است');
-            }
-        }
-
-        const passwordHashed = 'ss'; // . . .
-        const user = await this.userRepository.insertUser(auth.username , auth.email , passwordHashed);
-        const token = await this.tokenService.generateToken(user.id, user.username);
-
-        return { 
-            user,
-            ...token,
-        };
-    }
-
+    return {
+      user: mockUser,
+      accessToken: "mock-access-token",
+    };
+  }
 }
