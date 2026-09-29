@@ -22,7 +22,7 @@ export class AuthController {
     @Post('register')
     async register(@Body() auth : RegisterDto ) {
         const response = await this.authservice.register(auth)
-        return ApiResponseDto.success('Register Success', response)
+        return ApiResponseDto.success('User registered successfully', response)
     }
 
 }
