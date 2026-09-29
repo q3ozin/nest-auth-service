@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
+import { IsEmail , IsNotEmpty, IsString, Length } from "class-validator";
 import { Transform } from 'class-transformer';
 
 export class LoginDto {
@@ -16,4 +16,16 @@ export class LoginDto {
     @Length(8, 96)
     password! : string
     
+}
+
+export class RegisterDto extends LoginDto {
+
+    @Transform(({ value }) =>
+        typeof value === 'string' ? value.trim().toLowerCase() : value,
+    )
+    @IsNotEmpty()
+    @IsEmail()
+    @Length(6, 96)
+    email! : string
+
 }

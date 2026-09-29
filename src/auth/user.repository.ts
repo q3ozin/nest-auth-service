@@ -37,4 +37,19 @@ export class UserRepository {
 
     }
 
+    async insertUser(username : string , email : string ,  passwordHashed : string) {
+        return this.prisma.user.create({
+            data : {
+                username,
+                email,
+                password : passwordHashed
+            } ,
+            select : {
+                id : true,
+                username : true,
+                email : true
+            }
+        })
+    }
+
 }
