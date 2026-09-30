@@ -14,11 +14,11 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
     
     this.client.on('connect', () => {
-      this.logger.log('🚀 Redis Client Connected Successfully!');
+      this.logger.log('Redis Client Connected Successfully!');
     });
 
     this.client.on('error', (err: Error) => {
-      this.logger.error('❌ Redis Client Error:', err);
+      this.logger.error('Redis Client Error:', err);
     });
   }
 
