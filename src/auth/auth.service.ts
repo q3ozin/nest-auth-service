@@ -2,13 +2,19 @@ import { Injectable , ConflictException , UnauthorizedException } from "@nestjs/
 import { LoginDto , RegisterDto } from "./dto/user.dto.js";
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from "./user.repository.js";
+import { TokenService } from "./token.service.js";
 
 @Injectable()
 export class AuthService {
 
     constructor (
+        private readonly tokenService : TokenService,
         private readonly userRepository : UserRepository, 
     ) {}
+
+    async refreshToken(token: string) {
+        return await this.tokenService.refreshToken(token);
+    }
 
     async login(auth : LoginDto) {
         const user = await this.userRepository.checkUser(auth.username);
