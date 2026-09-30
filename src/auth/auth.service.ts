@@ -29,12 +29,15 @@ export class AuthService {
             throw new UnauthorizedException('Invalid username or password')
         }
 
+        const token = await this.tokenService.generateToken(user.id , user.username);
+
         return { 
             user : {
                 id : user.id,
                 username : user.username,
                 email : user.email,
             },
+                ...token,
         }
     }
 
@@ -54,8 +57,11 @@ export class AuthService {
         const passwordHashed = await bcrypt.hash( auth.password , 10);
         const user = await this.userRepository.insertUser(auth.username , auth.email , passwordHashed);
 
+        const token = await this.tokenService.generateToken(user.id, user.username);
+
         return { 
-            user
+            user,
+            ...token,
         };
     }
 
