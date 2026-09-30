@@ -25,4 +25,11 @@ export class AuthController {
         return ApiResponseDto.success('User registered successfully', response)
     }
 
+    @Throttle({ default : { ttl : 60000 , limit : 15 } })
+    @Post('refresh')
+    async refresherToken( @Body('token') token : string ) {
+        const response = await this.authservice.refreshToken(token)
+        return ApiResponseDto.success('Token refreshed successfully', response);
+    }
+
 }
