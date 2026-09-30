@@ -6,9 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenService } from './token.service.js';
 import { RedisService } from '../redis/redis.service.js';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '../common/strategy/jwt.strategy.js';
 
 @Module({
     imports : [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -30,7 +33,7 @@ import { RedisService } from '../redis/redis.service.js';
             },
         }),
     ],
-    providers : [UserRepository , TokenService , RedisService , AuthService],
+    providers : [JwtStrategy, UserRepository , TokenService , RedisService , AuthService],
     controllers : [AuthController],
 })
 export class AuthModule {};
