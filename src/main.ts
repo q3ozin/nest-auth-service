@@ -8,9 +8,9 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.useStaticAssets(join(process.cwd(), 'public/html'), { prefix: '/' });
-    app.useStaticAssets(join(process.cwd(), 'public/style'), { prefix: '/style' });
-    app.useStaticAssets(join(process.cwd(), 'public/script'), { prefix: '/script' });
-    app.useStaticAssets(join(process.cwd(), 'public/asset'), { prefix: '/asset' });
+    app.useStaticAssets(join(process.cwd(), 'public/style'), { prefix: '/' });
+    app.useStaticAssets(join(process.cwd(), 'public/script'), { prefix: '/' });
+    app.useStaticAssets(join(process.cwd(), 'public/asset'), { prefix: '/' });
 
     app.useGlobalPipes(
     new ValidationPipe({
@@ -21,6 +21,8 @@ async function bootstrap() {
         enableImplicitConversion: true,
     },
     }));
+
+    app.setGlobalPrefix('api');
 
   await app.listen(process.env.PORT ?? 80);
 }
