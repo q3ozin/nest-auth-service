@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { AuthService } from "./auth.service.js";
 import { AuthController } from "./auth.controller.js";
 import { UserRepository } from "./user.repository.js";
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule , JwtSignOptions } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenService } from './token.service.js';
 import { RedisService } from '../redis/redis.service.js';
@@ -26,7 +26,7 @@ import { JwtStrategy } from '../common/strategy/jwt.strategy.js';
                 return {
                     secret,
                     signOptions: {
-                        expiresIn: expiresIn as any,
+                        expiresIn: expiresIn as NonNullable<JwtSignOptions['expiresIn']>,
                     },
                 };
 
