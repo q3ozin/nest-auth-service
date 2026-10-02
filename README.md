@@ -24,7 +24,7 @@
 - [x] **Database & ORM**: PostgreSQL integration using Prisma ORM
 - [x] **User Authentication**: Secure Login & Register flows with Bcrypt password hashing
 - [x] **Security & Rate Limiting**: Input validation DTOs and endpoint throttling
-- [ ] **JWT Tokens**: Short-lived Access Tokens & Refresh Token rotation
-- [ ] **Session & Caching**: Redis integration for token blacklisting and fast lookup
+- [x] **JWT Tokens**: Short-lived Access Tokens & Refresh Token rotation
+- [x] **Session & Caching**: Redis integration for token blacklisting and fast lookup
 - [ ] **Authorization**: Role-Based Access Control (RBAC) with custom Guards
 - [ ] **Containerization**: Full Docker & Docker Compose environment
