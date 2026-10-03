@@ -3,7 +3,7 @@ import { LoginDto , RegisterDto } from "./dto/user.dto.js";
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from "./user.repository.js";
 import { TokenService } from "./token.service.js";
-import { RedisService } from "@/redis/redis.service.js";
+import { RedisService } from "../redis/redis.service.js";
 
 @Injectable()
 export class AuthService {
