@@ -3,6 +3,7 @@ import { LoginDto , RegisterDto } from "./dto/user.dto.js";
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from "./user.repository.js";
 import { TokenService } from "./token.service.js";
+import { RedisService } from "@/redis/redis.service.js";
 
 @Injectable()
 export class AuthService {
@@ -10,6 +11,7 @@ export class AuthService {
     constructor (
         private readonly tokenService : TokenService,
         private readonly userRepository : UserRepository, 
+        private readonly redisService : RedisService, 
     ) {}
 
     async logout(userId: number): Promise<{ message: string }> {
@@ -36,13 +38,19 @@ export class AuthService {
 
         const token = await this.tokenService.generateToken(user.id , user.username);
 
+        const profileData = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            createdAt: user.createdAt,
+        };
+
+        const cacheKey = `user:profile:${user.id}`;
+        await this.redisService.set(cacheKey, JSON.stringify(profileData), 600);
+
         return { 
-            user : {
-                id : user.id,
-                username : user.username,
-                email : user.email,
-            },
-                ...token,
+            user: profileData,
+            ...token,
         }
     }
 
@@ -60,12 +68,22 @@ export class AuthService {
         }
 
         const passwordHashed = await bcrypt.hash( auth.password , 10);
-        const user = await this.userRepository.insertUser(auth.username , auth.email , passwordHashed);
+        const newUser = await this.userRepository.insertUser(auth.username , auth.email , passwordHashed);
 
-        const token = await this.tokenService.generateToken(user.id, user.username);
+        const token = await this.tokenService.generateToken(newUser.id, newUser.username);
+
+        const profileData = {
+            id: newUser.id,
+            username: newUser.username,
+            email: newUser.email,
+            createdAt: newUser.createdAt,
+        };
+
+        const cacheKey = `user:profile:${newUser.id}`;
+        await this.redisService.set(cacheKey, JSON.stringify(profileData), 600);
 
         return { 
-            user,
+            newUser,
             ...token,
         };
     }

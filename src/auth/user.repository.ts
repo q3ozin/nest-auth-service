@@ -31,7 +31,8 @@ export class UserRepository {
                 id : true,
                 username : true,
                 email : true,
-                password : true
+                password : true,
+                createdAt : true
             }
         })
 
@@ -47,7 +48,8 @@ export class UserRepository {
             select : {
                 id : true,
                 username : true,
-                email : true
+                email : true,
+                createdAt : true
             }
         })
     }

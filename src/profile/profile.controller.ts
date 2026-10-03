@@ -1,16 +1,20 @@
-import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from "../common/decorators/current-user.decorator.js"
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Controller, Get, UseGuards} from "@nestjs/common";
 import { ApiResponseDto } from "../common/dto/api-response.dto.js";
 import { Throttle } from "@nestjs/throttler";
-import { JwtPayloadResponseDto } from './dto/jwt-payload-response.dto.js';
+import { ProfileService } from './profile.service.js';
+import { JwtAuthGuard } from '../common/guard/jwt-auth.guard.js';
 
 @Throttle({ default : { ttl : 60000 , limit : 10 } })
 @Controller('profile')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class ProfileController {
+    constructor(private readonly profileService: ProfileService) {}
+
     @Get()
-    getProfile(@CurrentUser() user : JwtPayloadResponseDto) : ApiResponseDto<JwtPayloadResponseDto> {
-        return ApiResponseDto.success( 'Profile decoded successfully' , user)
-    }
+    async getProfile(@CurrentUser('userId') userId: number) {
+    const profile = await this.profileService.getProfile(userId);
+    return ApiResponseDto.success('Profile retrieved successfully', profile);
+  }
+
 }
