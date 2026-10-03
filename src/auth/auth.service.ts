@@ -12,6 +12,11 @@ export class AuthService {
         private readonly userRepository : UserRepository, 
     ) {}
 
+    async logout(userId: number): Promise<{ message: string }> {
+        await this.tokenService.revokeRefreshToken(userId);
+        return { message: 'Logged out successfully' };
+    }
+
     async refreshToken(token: string) {
         return await this.tokenService.refreshToken(token);
     }

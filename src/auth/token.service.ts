@@ -16,6 +16,11 @@ export class TokenService {
         private readonly configService: ConfigService,
     ) {}
 
+    async revokeRefreshToken(userId: number): Promise<void> {
+        const redisKey = `refresh_token:${userId}`;
+        await this.redisservice.del(redisKey);
+    }
+
     async generateToken(id : number , username : string) {
 
         const accessSecret = this.configService.get<string>('JWT_ACCESS_SECRET');

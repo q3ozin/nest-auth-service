@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حساب کاربری</title>
+  <link rel="shortcut icon" href="./favicon.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="./auth.css">
+  <script type="module" src="./auth.js"></script>
+</head>
+<body>
+
+  <div class="card">
+    <!-- تب‌های بالای کارت -->
+    <div class="tabs">
+      <button class="tab-btn active" id="loginTab">ورود</button>
+      <button class="tab-btn" id="registerTab">ثبت‌نام</button>
+    </div>
+
+    <!-- فرم ورود -->
+    <form id="loginForm" class="auth-form active-form">
+      <h2>ورود به حساب</h2>
+      <p class="subtitle">اطلاعات خود را برای ورود وارد کنید</p>
+
+      <div class="form-group">
+        <label for="loginUsername">نام کاربری</label>
+        <input type="text" id="loginUsername" placeholder="ali123" required>
+      </div>
+
+      <div class="form-group">
+        <label for="loginPassword">رمز عبور</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit">ورود به حساب</button>
+    </form>
+
+    <!-- فرم ثبت‌نام -->
+    <form id="registerForm" class="auth-form">
+      <h2>ایجاد حساب جدید</h2>
+      <p class="subtitle">اطلاعات خود را برای ثبت‌نام وارد کنید</p>
+
+      <div class="form-group">
+        <label for="regUsername">نام کاربری</label>
+        <input type="text" id="regUsername" placeholder="ali123" required>
+      </div>
+
+      <div class="form-group">
+        <label for="regEmail">ایمیل</label>
+        <input type="email" id="regEmail" placeholder="user@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="regPassword">رمز عبور</label>
+        <input type="password" id="regPassword" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit">ایجاد حساب</button>
+    </form>
+  </div>
+
+</body>
+</html>
