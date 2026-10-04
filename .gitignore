@@ -147,3 +147,5 @@ vite.config.ts.timestamp-*
 .claude/
 .cursor/
 .devin/
+
+public/

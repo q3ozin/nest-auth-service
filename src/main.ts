@@ -3,6 +3,7 @@ import { AppModule } from './app.module.js';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'node:path';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -12,6 +13,8 @@ async function bootstrap() {
     app.useStaticAssets(join(process.cwd(), 'public/script'), { prefix: '/' });
     app.useStaticAssets(join(process.cwd(), 'public/asset'), { prefix: '/' });
 
+    app.useGlobalInterceptors(new LoggingInterceptor());
+    
     app.useGlobalPipes(
     new ValidationPipe({
     whitelist: true,
