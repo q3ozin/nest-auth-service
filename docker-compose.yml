@@ -1,0 +1,62 @@
+services:
+  # 1. NestJS App
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest_auth_app
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - PORT=80
+      - DATABASE_URL=postgresql://postgres:secret@postgres:5432/chatdb?schema=public
+      - JWT_ACCESS_SECRET=super-secret-access-key-change-in-production
+      - JWT_ACCESS_EXPIRATION=15m
+      - JWT_REFRESH_SECRET=super-secret-refresh-key-change-in-production
+      - JWT_REFRESH_EXPIRATION=7d
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # 2. PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: nest_auth_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: chatdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chatdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nest_auth_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
