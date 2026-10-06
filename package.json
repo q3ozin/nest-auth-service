@@ -20,6 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "postinstall": "prisma generate",
+    "studio": "prisma studio --url postgresql://postgres:secret@localhost:5433/chatdb?schema=public",
     "db:generate": ".\\node_modules\\.bin\\prisma.cmd generate"
   },
   "dependencies": {
