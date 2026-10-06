@@ -27,4 +27,4 @@
 - [x] **JWT Tokens**: Short-lived Access Tokens & Refresh Token rotation
 - [x] **Session & Caching**: Redis integration for token blacklisting and fast lookup
 - [ ] **Authorization**: Role-Based Access Control (RBAC) with custom Guards
-- [ ] **Containerization**: Full Docker & Docker Compose environment
+- [x] **Containerization**: Full Docker & Docker Compose environment

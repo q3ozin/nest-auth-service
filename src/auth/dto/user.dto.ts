@@ -1,9 +1,9 @@
 import { IsEmail , IsNotEmpty, IsString, Length } from "class-validator";
-import { Transform } from 'class-transformer';
+import { Transform, TransformFnParams } from 'class-transformer';
 
 export class LoginDto {
 
-    @Transform(({ value }) =>
+    @Transform(({ value }: TransformFnParams) =>
         typeof value === 'string' ? value.trim().toLowerCase() : value,
     )
     @IsNotEmpty()
@@ -20,7 +20,7 @@ export class LoginDto {
 
 export class RegisterDto extends LoginDto {
 
-    @Transform(({ value }) =>
+    @Transform(({ value }: TransformFnParams) =>
         typeof value === 'string' ? value.trim().toLowerCase() : value,
     )
     @IsNotEmpty()
