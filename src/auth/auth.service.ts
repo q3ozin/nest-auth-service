@@ -1,4 +1,4 @@
-import { Injectable , ConflictException , Logger , UnauthorizedException } from "@nestjs/common";
+import { Injectable , ConflictException , UnauthorizedException } from "@nestjs/common";
 import { LoginDto , RegisterDto } from "./dto/user.dto.js";
 import * as bcrypt from 'bcryptjs';
 import { UserRepository } from "./user.repository.js";
@@ -8,8 +8,6 @@ import { RedisService } from "../redis/redis.service.js";
 @Injectable()
 export class AuthService {
 
-    private readonly logger = new Logger(AuthService.name);
-
     constructor (
         private readonly tokenService : TokenService,
         private readonly userRepository : UserRepository, 
@@ -18,7 +16,6 @@ export class AuthService {
 
     async logout(userId: number): Promise<{ message: string }> {
         await this.tokenService.revokeRefreshToken(userId);
-        this.logger.log(`User logged out and refresh token revoked for userId: ${userId}`);
         return { message: 'Logged out successfully' };
     }
 
@@ -30,14 +27,12 @@ export class AuthService {
         const user = await this.userRepository.checkUser(auth.username);
 
         if(!user) {
-            this.logger.warn(`Failed login attempt for non-existing username: ${auth.username}`);
             throw new UnauthorizedException('Invalid username or password')
         }
 
         const isPasswordValid = await bcrypt.compare(auth.password , user.password);
 
         if(!isPasswordValid) {
-            this.logger.warn(`Failed login attempt (invalid password) for userId: ${user.id}`);
             throw new UnauthorizedException('Invalid username or password')
         }
 
@@ -52,7 +47,6 @@ export class AuthService {
 
         const cacheKey = `user:profile:${user.id}`;
         await this.redisService.set(cacheKey, JSON.stringify(profileData), 600);
-        this.logger.log(`Cache WARM-UP successful for userId: ${user.id}`);
 
         return { 
             user: profileData,
@@ -65,7 +59,6 @@ export class AuthService {
         const check = await this.userRepository.checkUser(auth.username , auth.email)
 
         if (check) {
-            this.logger.warn(`Registration conflict for username: ${auth.username} or email: ${auth.email}`);
             if (check.username === auth.username) {
                 throw new ConflictException('Username is already taken');
             }
@@ -88,7 +81,6 @@ export class AuthService {
 
         const cacheKey = `user:profile:${newUser.id}`;
         await this.redisService.set(cacheKey, JSON.stringify(profileData), 600);
-        this.logger.log(`New user registered & profile cache warmed up for userId: ${newUser.id}`);
         
         return { 
             newUser,
