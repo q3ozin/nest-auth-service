@@ -1,4 +1,4 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, HttpCode, Logger , HttpStatus, UseGuards } from "@nestjs/common";
 import { Throttle } from "@nestjs/throttler";
 import { ApiResponseDto } from "../common/dto/api-response.dto.js";
 import { LoginDto , RegisterDto } from "./dto/user.dto.js";
@@ -9,6 +9,8 @@ import { JwtAuthGuard } from "../common/guard/jwt-auth.guard.js";
 @Controller('auth')
 export class AuthController {
 
+    private readonly logger = new Logger(AuthController.name);
+
     constructor(
         private readonly authservice : AuthService,
     ) {}
@@ -17,6 +19,7 @@ export class AuthController {
     @Post('login')
     async login(@Body() auth : LoginDto ) {
         const response = await this.authservice.login(auth)
+        this.logger.log(`Attempting login for username: ${auth.username}`);
         return ApiResponseDto.success('User logged in successfully', response)
     }
 
@@ -24,6 +27,7 @@ export class AuthController {
     @Post('register')
     async register(@Body() auth : RegisterDto ) {
         const response = await this.authservice.register(auth)
+        this.logger.log(`User logged in successfully: ${auth.username}`);
         return ApiResponseDto.success('User registered successfully', response)
     }
 
